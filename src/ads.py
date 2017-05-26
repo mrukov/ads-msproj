@@ -68,7 +68,7 @@ def getState():
 
 
 def getPicture(s):
-    scriptName = 'sh ./ms-script.sh'
+    scriptName = './ms-script.sh'
     picture = "../ads/"+s
     sleep = str(SLEEP)
     resolution = "1920x1080"
