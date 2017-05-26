@@ -14,15 +14,15 @@ bangkok=  "1609350"
 rain = 0
 hot = 0
 cold = 0
-lunch = 0
+food= 0
 
-SLEEP = 5
+SLEEP = 2
 
 def incrementIndex(state):
     global rain
     global hot
     global cold
-    global lunch
+    global food
     dir = "../ads/" + state
     countFiles = next(os.walk(dir))[2] 
     length = len(countFiles)
@@ -38,10 +38,10 @@ def incrementIndex(state):
         cold = cold + 1
         if cold == length:
             cold = 0
-    if state == "lunch":
-        lunch = lunch + 1
-        if lunch == length:
-            lunch = 0
+    if state == "food":
+        food = food + 1
+        if food == length:
+            food = 0
     
     #print len(countFiles)
 
@@ -49,7 +49,7 @@ def getState():
 
     hour = datetime.datetime.now().hour
     if hour >= 11 and hour <= 12:
-        return "lunch"
+        return "food"
 
      # if not during lunchtime, get weather status
     key = "beee2caedc09e8322992562b541729d3"
@@ -68,22 +68,26 @@ def getState():
 
 
 def getPicture(s):
-    scriptName = './ms-script.sh'
-    picture = "../ads/"+s+".jpg"
+    scriptName = 'sh ./ms-script.sh'
+    picture = "../ads/"+s
     sleep = str(SLEEP)
     resolution = "1920x1080"
-    params = scriptName + " " + picture + " " + sleep + " " + resolution
+    if s == "rain":
+        state = rain
+    if s == "hot":
+        state = hot
+    if s == "cold":
+        state = cold
+    if s == "food":
+        state = food
+    incrementIndex(s)
+    params = scriptName + " " + picture + " " + sleep + " " + resolution + " " + str(state)
     os.system(params)
+ 
+
+
+#for i in range(0, 10):
+while 1:
+    st = getState()
+    getPicture(st)
     
-
-#state = getState()
-#getPicture(state)
-#getPicture("sunny")
-#time.sleep(SLEEP-1)
-#getPicture("rain")
-#time.sleep(SLEEP-1)
-#getPicture("default")
-#time.sleep(SLEEP)
-#time.sleep(10)
-
-incrementIndex("food")
