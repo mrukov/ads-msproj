@@ -16,7 +16,7 @@ hot = 0
 cold = 0
 food= 0
 
-SLEEP = 2
+SLEEP = 10
 
 def incrementIndex(state):
     global rain
@@ -48,7 +48,7 @@ def incrementIndex(state):
 def getState():
 
     hour = datetime.datetime.now().hour
-    if hour >= 11 and hour <= 12:
+    if hour >= 14 and hour <= 12:
         return "food"
 
      # if not during lunchtime, get weather status
@@ -60,7 +60,7 @@ def getState():
     if '3h' in formatted_response['list'][0]['rain']:
         return "rain"
     elif formatted_response['list'][0]['main']['temp'] > 25:
-        return "sunny"
+        return "hot"
     elif formatted_response['list'][0]['main']['temp'] < 5:
         return "cold"
     else:
@@ -80,14 +80,14 @@ def getPicture(s):
         state = cold
     if s == "food":
         state = food
+    if s == "default":
+        state = 0
     incrementIndex(s)
     params = scriptName + " " + picture + " " + sleep + " " + resolution + " " + str(state)
     os.system(params)
  
 
 
-#for i in range(0, 10):
-while 1:
+for i in range(0, 10):
     st = getState()
     getPicture(st)
-    

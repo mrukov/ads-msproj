@@ -1,4 +1,4 @@
-#/usr/bin/env zsh
+#!/bin/bash
 
 PATH=$1
 SLEEPTIME=$2
@@ -17,6 +17,8 @@ do
     count=$((count+1))
 done
 
+echo $FILE
+
 (/usr/bin/feh --hide-pointer -x -q -B black -g $RESOLUTION $FILE) & pid=$!
-(/usr/bin/sleep $SLEEPTIME && kill -9 $pid) 
+(/bin/sleep $SLEEPTIME && kill -9 $pid) 
 
