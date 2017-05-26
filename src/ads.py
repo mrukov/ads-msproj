@@ -1,23 +1,22 @@
 import requests
 import json
 import time
-import subprocess
+#import subprocess
 import os
 import datetime
 import sys
 import thread
-from subprocess import call
+#from subprocess import call
 from pprint import pprint
 
 tm = "665087"
-bangkok=  "1609350"
 
 rain = 0
 hot = 0
 cold = 0
 food= 0
 
-SLEEP = 3
+SLEEP = 5 * 60
 
 def incrementIndex(state):
     global rain
@@ -44,8 +43,7 @@ def incrementIndex(state):
         if food == length:
             food = 0
     
-    #print len(countFiles)
-
+    
 def getState():
 
     hour = datetime.datetime.now().hour
@@ -57,16 +55,18 @@ def getState():
     URL = "http://api.openweathermap.org/data/2.5/forecast?id=" + tm + "&units=metric&APPID=" + key
     response = requests.get(URL)
     formatted_response = response.json()
-    
-    if '3h' in formatted_response['list'][0]['rain']:
-        return "rain"
-    elif formatted_response['list'][0]['main']['temp'] > 25:
-        return "hot"
-    elif formatted_response['list'][0]['main']['temp'] < 5:
-        return "cold"
-    else:
+    #pprint(formatted_response) 
+    try:   
+        if '3h' in formatted_response['list'][0]['rain']:
+         return "rain"
+        elif formatted_response['list'][0]['main']['temp'] > 25:
+         return "hot"
+        elif formatted_response['list'][0]['main']['temp'] < 5:
+         return "cold"
+        else:
+         return "default"
+    except:
         return "default"
-
 
 def getPicture(s):
     scriptName = './ms-script.sh'
@@ -86,13 +86,12 @@ def getPicture(s):
     incrementIndex(s)
     params = scriptName + " " + picture + " " + sleep + " " + resolution + " " + str(state)
     thread.start_new_thread(call_shell, (params,))
-    #os.system(params)
-    
+        
 
 def call_shell(shell_params):
     os.system(shell_params)
 
-for i in range(0, 5):
+while 1:
     st = getState()
     getPicture(st)
     time.sleep(SLEEP - 1)
