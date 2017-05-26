@@ -5,6 +5,7 @@ import subprocess
 import os
 import datetime
 import sys
+import thread
 from subprocess import call
 from pprint import pprint
 
@@ -16,7 +17,7 @@ hot = 0
 cold = 0
 food= 0
 
-SLEEP = 10
+SLEEP = 3
 
 def incrementIndex(state):
     global rain
@@ -84,10 +85,14 @@ def getPicture(s):
         state = 0
     incrementIndex(s)
     params = scriptName + " " + picture + " " + sleep + " " + resolution + " " + str(state)
-    os.system(params)
- 
+    thread.start_new_thread(call_shell, (params,))
+    #os.system(params)
+    
 
+def call_shell(shell_params):
+    os.system(shell_params)
 
-for i in range(0, 10):
+for i in range(0, 5):
     st = getState()
     getPicture(st)
+    time.sleep(SLEEP - 1)
