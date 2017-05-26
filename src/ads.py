@@ -49,7 +49,7 @@ def incrementIndex(state):
 def getState():
 
     hour = datetime.datetime.now().hour
-    if hour >= 14 and hour <= 12:
+    if hour >= 11 and hour <= 12:
         return "food"
 
      # if not during lunchtime, get weather status
